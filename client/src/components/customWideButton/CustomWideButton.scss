@@ -1,6 +1,7 @@
+
 .signUp-button {
-    background-color: #1d9bf0;
-    border-radius: 50px;
+    background-color: #1d9bf0 !important;
+    border-radius: 50px !important;
     font-size: 17px;
     padding: 3px 22px;
     font-weight: 600;
@@ -8,20 +9,20 @@
 }
 
 .signIn-button {
-    background-color: white;
-    border-radius: 50px;
+    background-color: white !important;
+    border-radius: 50px !important;
     font-size: 17px;
     padding: 3px 22px;
     font-weight: 600;
     width: 300px;
     border-color: #cfd9de;
-    color: #1d9bf0
+    color: #1d9bf0 !important
 }
 
 .next-button {
-    background-color: #1a1919;
-    color: white;
-    border-radius: 50px;
+    background-color: #1a1919 !important;
+    color: white !important;
+    border-radius: 50px !important;
     font-size: 17px;
     padding: 3px 22px;
     font-weight: 600;
@@ -30,12 +31,20 @@
 
 .forgot-password-button {
     margin-top: 20px;
-    background-color: white;
-    border-radius: 50px;
+    background-color: white !important;
+    border-radius: 50px !important;
     font-size: 17px;
     padding: 3px 22px;
     font-weight: 600;
     width: 300px;
     border-color: #cfd9de;
-    color: #1a1919
+    color: #1a1919 !important
+}
+
+.small-white{
+    background-color: white !important;
+    color: #1a1919 !important;
+    font-weight: 600 !important;
+    border-radius: 50px !important;
+    border: 2px solid #cfd9de !important;
 }

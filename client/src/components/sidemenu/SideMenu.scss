@@ -1,0 +1,16 @@
+.sidemenu {
+    .nav-link {
+        font-size: 22px;
+        color: #1a1919;
+        max-width: fit-content;
+        border-radius: 50px !important;
+        margin-left: 30px;
+    }
+
+    .nav-link:hover {
+        background-color:#cfd9de;
+        border-radius: 50px !important;
+        max-width: fit-content;
+        color: #1a1919;
+    }
+}

@@ -1,6 +1,10 @@
 .container.landing {
     max-width: 100%;
 
+    a {
+        text-decoration: none;
+    }
+
     .row>* {
         padding: 0
     }
@@ -14,8 +18,8 @@
     .right-side {
         padding: 20px;
 
-        .twitter-logo{
-            width:50px;
+        .twitter-logo {
+            width: 50px;
             margin: 25px 0px;
         }
 
@@ -36,7 +40,8 @@
             width: 300px;
         }
 
-        .already-have-account{
+        .already-have-account {
+            margin-top: 40px;
             font-size: 20px;
             font-weight: 600;
         }

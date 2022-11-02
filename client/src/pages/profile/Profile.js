@@ -2,17 +2,21 @@ import React, { useEffect } from "react";
 import { Container, Row, Col, Image, Button, FormControl, Navbar } from "react-bootstrap";
 import SideMenu from "../../components/sidemenu/SideMenu";
 import { FiSearch } from 'react-icons/fi';
-import './Home.scss';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import './Profile.scss';
 import WhatsHappening from "../../components/whatsHappening/WhatsHappening";
 import WhatsHappeningCard from "../../components/whatshappeningCard/WhatsHappeningCard";
 import NewsFeed from "../../components/newsFeed/NewsFeed";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import ProfilePageHeader from "../../components/profilePageHeader/ProfilePageHeader";
 
-const Home = () => {
+const Profile = () => {
     const navigate = useNavigate();
-    const currentUser = useSelector(state => state.auth?.user);
-    console.log("currentUser", currentUser)
+    const location = useLocation();
+    console.log(location)
+
+    const profileData = location?.state?.item;
+
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
         if (!token) {
@@ -22,7 +26,7 @@ const Home = () => {
         }
     }, [localStorage])
     return (
-        <Container className="home-container">
+        <Container className="profile-container">
             <Row >
                 <Col sm={3} xs={12} className="col-1">
                     <Row className="col-header">
@@ -38,11 +42,16 @@ const Home = () => {
                 </Col>
                 <Col sm={5} xs={12} className="col-2">
                     <Row className="col-header">
-                        <h5 className="page-title">Home</h5>
+                        <Col sm={1} xs={1} style={{ border: 'none', paddingTop: 10 }}>
+                            <IoMdArrowRoundBack onClick={() => navigate(-1)} />
+                        </Col>
+                        <Col sm={11} xs={11} style={{ paddingTop: 10 }}>
+                            <h5 className="page-title">{profileData.profileName}</h5>
+                        </Col>
                     </Row>
                     <div className="col-body">
-                        <WhatsHappening />
-                        <NewsFeed />
+                        <ProfilePageHeader profileData={profileData} />
+                        <NewsFeed profileData={profileData} />
                     </div>
                 </Col>
                 <Col sm={4} xs={12} className="col-3">
@@ -65,4 +74,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Profile;

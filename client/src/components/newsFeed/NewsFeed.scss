@@ -1,0 +1,83 @@
+.newsfeed {
+    margin-top: 10px;
+
+    .container {
+        border-top: 0.5px rgb(224, 224, 224) solid;
+        padding: 10px 0 !important;
+
+        .left-side{
+            padding-right: 0;
+        }
+        .right-side{
+            padding-left: 0;
+        }
+
+        .image-container {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            background-color: aqua;
+            margin-left: 12px;
+            .image {
+                object-fit: fill;
+                width: 50px;
+                height: 50px;
+                border-radius: 50px;
+            }
+
+        }
+
+        .card {
+            border: none;
+            background-color: transparent;
+
+            .topic {
+                color: grey;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .profileName {
+                font-size: 15px;
+                font-weight: 700;
+                cursor: pointer;
+                margin: 0;
+
+                i {
+                    font-weight: 400;
+                    color: grey;
+                }
+            }
+
+            .tweets {
+                color: grey;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .icons {
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-around;
+
+                .icon {
+                    font-size: 30px;
+                    padding: 6px;
+                    border-radius: 20px;
+                }
+
+                .icon:hover {
+                    background-color: white;
+                    color: #1d9bf0;
+                }
+            }
+        }
+
+
+    }
+
+    .container:hover,
+    .card:hover {
+        background-color: rgb(231, 231, 231);
+    }
+}

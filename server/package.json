@@ -1,29 +1,32 @@
 {
-  "name": "twitter-clone",
+  "name": "signup-signin",
   "version": "1.0.0",
-  "description": "",
+  "description": "Basic Signup Signin page baseed using MERN tools",
   "main": "server.js",
   "scripts": {
-    "client-install": "cd client && npm install",
+    "client-install": "npm install --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "keywords": [],
-  "author": "",
+  "author": "raivaibhav",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "concurrently": "^5.3.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "helmet": "^4.2.0",
-    "mongoose": "^5.10.16",
-    "prop-types": "^15.7.2",
-    "react-avatar": "^3.9.7"
+    "express": "^4.16.4",
+    "is-empty": "^1.2.0",
+    "jsonwebtoken": "^8.5.0",
+    "mongoose": "^5.4.17",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.11.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^1.18.10"
   }
 }

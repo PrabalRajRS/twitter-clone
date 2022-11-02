@@ -8,42 +8,90 @@ import './Landing.scss';
 import Button from 'react-bootstrap/Button';
 import Login from "../../components/login/Login";
 import CustomWideButton from "../../components/customWideButton/CustomWideButton";
+import Register from "../../components/register/Register";
 
 const Landing = () => {
-    const [modalShow, setModalShow] = React.useState(false);
-    function MyVerticallyCenteredModal(props) {
-        return (
+    const [loginModalShow, setLoginModalShow] = React.useState(false);
+    const [registerModalShow, setRegisterModalShow] = React.useState(false);
+
+    // function LoginModal(props) {
+    //     return (
+    //         <Modal
+    //             {...props}
+    //             size="lg"
+    //             aria-labelledby="contained-modal-title-vcenter"
+    //             centered
+    //         >
+    //             <Login onHide={props.onHide} />
+    //         </Modal>
+    //     );
+    // }
+    // function RegisterModal(props) {
+    //     return (
+    //         <Modal
+    //             {...props}
+    //             size="lg"
+    //             aria-labelledby="contained-modal-title-vcenter"
+    //             centered
+    //         >
+    //             <Register onHide={props.onHide} />
+    //         </Modal>
+    //     );
+    // }
+
+    const handleShowModal = (val) => {
+        if (val === "register") {
+            setRegisterModalShow(true);
+            setLoginModalShow(false)
+        } else {
+            setLoginModalShow(true)
+            setRegisterModalShow(false);
+        }
+    }
+
+    return (
+        <Container className="landing">
+            <Row>
+                <Col className="left-side" sm={6} xs={12}>
+                    <Image src="/landing.jpg" className="landing-image" />
+                </Col>
+                <Col className="right-side" sm={6} xs={12}>
+                    <Image src="/twitter-logo.png" className="twitter-logo" />
+                    <h1 className="titleOne">Happening now</h1>
+                    <h3 className="titleTwo">Join Twitter Today.</h3>
+                    <CustomWideButton onClick={() => handleShowModal('register')} className="signUp-button" buttonText="Sign up with phone or email" />
+                    <p className="termConditions">
+                        By signing up, you agree to the <a href="/">Terms of Service</a> and <a href="/">Privacy Policy</a>, including <a href="/">Cookie Use</a>.
+                    </p>
+                    <p className="already-have-account">Already have an account?</p>
+                    <CustomWideButton onClick={() => handleShowModal('signin')} className="signIn-button" buttonText="Sign in" />
+                </Col>
+            </Row>
+
+            {/* <LoginModal
+                show={loginModalShow}
+                onHide={() => setLoginModalShow(false)}
+            />
+
+            <RegisterModal
+                show={registerModalShow}
+                onHide={() => setRegisterModalShow(false)}
+            /> */}
+
             <Modal
-                {...props}
+                show={loginModalShow || registerModalShow}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
-                <Login onHide={props.onHide} />
-            </Modal>
-        );
-    }
-    return (
-        <Container className="landing">
-            <Row >
-                <Col className="left-side">
-                    <Image src="/landing.jpg" className="landing-image" />
-                </Col>
-                <Col className="right-side">
-                    <Image src="/twitter-logo.png" className="twitter-logo" />
-                    <h1 className="titleOne">Happening now</h1>
-                    <h3 className="titleTwo">Join Twitter Today.</h3>
-                    <CustomWideButton onClick={() => setModalShow(true)} className="signUp-button" buttonText="Sign up with phone or email" />
-                    <p className="termConditions">By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use.</p>
-                    <p className="already-have-account">Already have an account?</p>
-                    <CustomWideButton onClick={() => setModalShow(true)} className="signIn-button" buttonText="Sign in" />
-                </Col>
-            </Row>
+                {
+                    loginModalShow
+                        ? <Login onHide={() => setLoginModalShow(false)} handleShowModal={handleShowModal} />
+                        : <Register onHide={() => setRegisterModalShow(false)} handleShowModal={handleShowModal} />
+                }
 
-            <MyVerticallyCenteredModal
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-            />
+            </Modal>
+
         </Container>
     )
 }
