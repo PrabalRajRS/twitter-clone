@@ -24,16 +24,12 @@ const UserSchema = new Schema({
     default: "",
   },
   followers: {
-    type: String,
+    type: Array,
     default: [],
   },
   following: {
-    type: String,
+    type: Array,
     default: [],
-  },
-  coverPhoto: {
-    type: String,
-    default: "",
   },
   date: {
     type: Date,

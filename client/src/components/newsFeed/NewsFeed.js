@@ -1,62 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Image, Row } from "react-bootstrap";
-import { AiOutlineHeart } from 'react-icons/ai';
+import { Button, Card, Col, Image, Modal, Row } from "react-bootstrap";
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { FaRetweet } from 'react-icons/fa';
 import { BsChat } from 'react-icons/bs';
 import { BiUpload } from 'react-icons/bi'
 
 import "./NewsFeed.scss";
-import { useNavigate } from "react-router-dom";
-import { GetApi } from "../../services/api.service";
+import { useNavigate, useParams } from "react-router-dom";
+import { GetApi, PostApi, PutApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
+import { useSelector } from "react-redux";
+import { RiCreativeCommonsZeroLine } from "react-icons/ri";
+import Comments from "../comments/comments";
 
 const NewsFeed = () => {
     const navigate = useNavigate();
-    const items = [
-        {
-            id: 1,
-            profileName: "Raj",
-            userName: "Raj",
-            topic: "Entertainment",
-            description: "Fans wish Amala Paul a happy birthday",
-            reTweets: "4576",
-            likes: "1233",
-            comments: "5456",
-            image: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600"
-        }, {
-            id: 2,
-            profileName: "mukhesh",
-            userName: "mukhesh",
-            topic: "Games",
-            description: "Akshay Kumar's Ram Setu hits the theatres",
-            reTweets: "4576",
-            likes: "1233",
-            comments: "5456",
-            image: "https://www.whatsappimages.in/wp-content/uploads/2021/07/Top-HD-sad-quotes-for-whatsapp-status-in-hindi-Pics-Images-Download-Free.gif"
-        }, {
-            id: 3,
-            profileName: "Vimal",
-            userName: "Vimal",
-            topic: "Trending In india",
-            description: "ब्रिटेन के 57वें प्रधानमंत्री बने ऋषि सुनक",
-            reTweets: "4576",
-            likes: "1233",
-            comments: "5456",
-            image: "https://images.pexels.com/photos/593655/pexels-photo-593655.jpeg?auto=compress&cs=tinysrgb&w=600"
-        }, {
-            id: 4,
-            profileName: "surendar",
-            userName: "surendar",
-            topic: "Nasa Bites",
-            description: "NASA Announced Its Unidentified Aerial Phenomena Research Team",
-            reTweets: "4576",
-            likes: "1233",
-            comments: "5456",
-            image: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&w=600"
-        },
-    ];
-
+    const loggedUserId = localStorage.getItem("userId");
+    const [currentItem, setCurrentItem] = useState()
     const [newsFeed, setNewsFeed] = useState();
+    const [users, setUsers] = useState();
+    const params = useParams();
+    const [response, setResponse] = useState()
+    const [comments, setComments] = useState()
+    const [showPost, setShowPost] = useState(false);
+
+    const handleClose = () => {
+        setShowPost(false)
+        setResponse({})
+    };
+
+    const getComments = async (item) => {
+        await GetApi(`${baseUrl}/comments`)
+            .then(response => {
+                setComments(response?.comments);
+            })
+            .catch(error => console.log(error))
+    }
+
+    const filterComments = (item) => {
+        const filteredComments = comments
+            && comments.filter(comment => comment?.postId === item?._id)
+        return filteredComments
+    }
+
+    const getUserData = async () => {
+        await GetApi(`${baseUrl}/users`)
+            .then(response => {
+                setUsers(response?.data?.users);
+            })
+            .catch(error => console.log(error))
+    }
 
     const handleClick = (route, item) => {
         navigate(route, {
@@ -66,48 +59,130 @@ const NewsFeed = () => {
         });
     }
 
-
     const getNewsFeed = async () => {
         await GetApi(`${baseUrl}/newsFeed`)
             .then(response => {
-                console.log(response)
-                setNewsFeed(response?.newsFeed);
+                if (params?.id) {
+                    const filteredFeeds = response?.newsFeed.filter(news => news?.userId === params?.id)
+                    setNewsFeed(filteredFeeds);
+                } else {
+                    setNewsFeed(response?.newsFeed);
+                }
             })
             .catch(error => console.log(error))
     }
 
+    const handleProfileData = (item) => {
+        return users && users.find(user => user._id === item?.userId)
+    }
+    const handleLike = async (item) => {
+        await PostApi(`${baseUrl}/newsFeed/likepost/${item}/${loggedUserId}`)
+            .then(response => {
+                setResponse(response);
+            })
+            .catch(error => console.log(error))
+    }
+
+    const handleRetweet = async (item) => {
+        const formData = new FormData();
+        formData.append("userId", loggedUserId)
+        formData.append("image", item?.image)
+        formData.append("content", item?.content)
+        formData.append("reTweets", item?.reTweets)
+        formData.append("name", handleProfileData(item)?.name)
+        formData.append("likes", item?.likes)
+        // for (let i = 0; i < item.image.length; i++) {
+        //     formData.append("image[]", item.image[i]);
+        // }
+        formData.append("image[]", item?.image)
+
+        await PostApi(`${baseUrl}/newsFeed/retweet/${item._id}/${loggedUserId}`)
+            .then(response => {
+                setResponse(response);
+            })
+            .catch(error => console.log(error))
+
+        await PostApi(`${baseUrl}/newsFeed`, formData)
+            .then(response => {
+                setResponse(response.data)
+            })
+            .catch(error => console.log(error))
+    }
+
+    const handleshowPost = (item) => {
+        setCurrentItem(item)
+        setShowPost(true)
+    }
+
     useEffect(() => {
         getNewsFeed();
-    }, []);
-
-    console.log("newsFeed", newsFeed)
-
+        getUserData();
+        getComments();
+    }, [response]);
 
     return (
         <div className="newsfeed">
             {
-                items.map((item) => (
-                    <Row className="container">
-                        <Col sm={2} className="left-side">
-                            <div className="image-container">
-                                <Image className="image" src={item.image} />
-                            </div>
-                        </Col>
-                        <Col sm={10} className="right-side">
-                            <div className="card" key={item.id}>
-                                {/* <p className="topic" onClick={() => handleClick("/profile", item)}>{item.topic}</p> */}
-                                <p className="profileName" onClick={() => handleClick(`/profile/${item.id}`, item)}>{item.profileName}<i> @{item.userName}</i></p>
-                                <p >{item.description}</p>
-                                <div className="icons">
-                                    <span><BsChat className="icon" />{item.comments}</span>
-                                    <span><FaRetweet className="icon" />{item.reTweets}</span>
-                                    <span><AiOutlineHeart className="icon" />{item.likes}</span>
-                                    <span><BiUpload className="icon" /></span>
+                newsFeed && newsFeed.map((item) => (
+                    <div className="container" key={item?._id}>
+                        <p style={{ fontWeight: "500", marginBottom: 0, marginLeft: "80px", color: "grey" }}>{item?.name && `You Retweeted`}</p>
+                        <Row >
+                            <Col sm={2} className="left-side">
+                                <div className="image-container">
+                                    {handleProfileData(item)?.profilePicture != ""
+                                        ? <Image className="image" src={`http://localhost:3000/uploads/${handleProfileData(item)?.profilePicture}`} />
+                                        : <Image className="image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" />}
                                 </div>
-                            </div>
-                        </Col>
-                    </Row>
+                            </Col>
+                            <Col sm={10} className="right-side">
+                                <div className="card" key={item.id}>
+                                    {
+                                        item?.name
+                                            ? <p className="profileName">
+                                                {item?.name}<i> @{item?.name}</i>
+                                            </p> :
+                                            <p className="profileName" onClick={() => handleClick(`/profile/${handleProfileData(item)?._id}`, item)}>
+                                                {handleProfileData(item)?.name}<i> @{handleProfileData(item)?.name}</i>
+                                            </p>
+                                    }
+                                    <div onClick={() => handleshowPost(item)}>
+                                        <p >{item?.content}</p>
+                                        <div className="img-container">
+                                            {
+                                                item?.image != ""
+                                                && item?.image.map((img, idx) => <Image key={idx} src={`http://localhost:3000/uploads/${img}`} className="img" />)
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className="icons">
+                                        <span><BsChat className="icon" />{filterComments(item)?.length}</span>
+                                        <span>
+                                            {
+                                                <FaRetweet className="icon" onClick={() => handleRetweet(item)} />
+                                            }
+                                            {item?.reTweets?.length}
+                                        </span>
+                                        <span>
+                                            {
+                                                item?.likes.includes(loggedUserId)
+                                                    ? <AiFillHeart className="icon" style={{ color: "pink" }} onClick={() => handleLike(item._id)} />
+                                                    : <AiOutlineHeart className="icon" onClick={() => handleLike(item._id)} />
+                                            }
+                                            {item?.likes?.length}</span>
+                                        <span><BiUpload className="icon" /></span>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
                 ))}
+            <Modal
+                size="lg"
+                show={showPost}
+                onHide={handleClose}
+            >
+                <Comments item={currentItem} />
+            </Modal>
         </div>
     )
 }

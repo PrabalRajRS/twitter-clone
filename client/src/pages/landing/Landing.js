@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,35 +9,14 @@ import Button from 'react-bootstrap/Button';
 import Login from "../../components/login/Login";
 import CustomWideButton from "../../components/customWideButton/CustomWideButton";
 import Register from "../../components/register/Register";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
+    const navigate = useNavigate();
     const [loginModalShow, setLoginModalShow] = React.useState(false);
     const [registerModalShow, setRegisterModalShow] = React.useState(false);
 
-    // function LoginModal(props) {
-    //     return (
-    //         <Modal
-    //             {...props}
-    //             size="lg"
-    //             aria-labelledby="contained-modal-title-vcenter"
-    //             centered
-    //         >
-    //             <Login onHide={props.onHide} />
-    //         </Modal>
-    //     );
-    // }
-    // function RegisterModal(props) {
-    //     return (
-    //         <Modal
-    //             {...props}
-    //             size="lg"
-    //             aria-labelledby="contained-modal-title-vcenter"
-    //             centered
-    //         >
-    //             <Register onHide={props.onHide} />
-    //         </Modal>
-    //     );
-    // }
+    const loggedUserId = localStorage.getItem("userId");
 
     const handleShowModal = (val) => {
         if (val === "register") {
@@ -48,6 +27,12 @@ const Landing = () => {
             setRegisterModalShow(false);
         }
     }
+
+    useEffect(() => {
+        if (loggedUserId) {
+            navigate("/home")
+        }
+    }, [])
 
     return (
         <Container className="landing">
@@ -67,17 +52,7 @@ const Landing = () => {
                     <CustomWideButton onClick={() => handleShowModal('signin')} className="signIn-button" buttonText="Sign in" />
                 </Col>
             </Row>
-
-            {/* <LoginModal
-                show={loginModalShow}
-                onHide={() => setLoginModalShow(false)}
-            />
-
-            <RegisterModal
-                show={registerModalShow}
-                onHide={() => setRegisterModalShow(false)}
-            /> */}
-
+            
             <Modal
                 show={loginModalShow || registerModalShow}
                 size="lg"

@@ -7,8 +7,20 @@ const validateRegisterInput = require("./register");
 const validateLoginInput = require("./login");
 const User = require("../../models/User");
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "../client/public/uploads");
+  },
+  filename: (req, file, callback) => {
+    callback(null, file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage });
+
 router.post("/register", (req, res) => {
-  console.log(req.body);
   const { errors, isValid } = validateRegisterInput(req.body);
   console.log(isValid);
   if (!isValid) {
@@ -67,7 +79,8 @@ router.post("/login", (req, res) => {
           (err, token) => {
             res.json({
               success: true,
-              token: "Bearer " + token
+              token: "Bearer " + token,
+              user: payload
             });
           }
         );
@@ -81,7 +94,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const users = await User.find();
+  const users = await User.find().sort('-date');
   res.status(200).json({
     status: "success",
     results: users.length,
@@ -100,5 +113,81 @@ router.get('/:id', async (req, res) => {
     res.status(404).send({ message: 'News Feed not found!' });
   }
 });
+
+router.put('/profilepicture/:id', upload.any(), async (req, res) => {
+  try {
+    if (req.files) {
+      const updatedUser = await User.findOneAndReplace(
+        { _id: req.params.id },
+        { $set: { profilePicture: req?.files[0]?.filename } },
+        // profilePicture: req.files[0].filename
+      );
+      res.send({ updatedUser });
+      // res.send({ message: 'The NewsFeed was updated' });
+    }
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+});
+
+router.put('/coverPhoto/:id', upload.any(), async (req, res) => {
+  try {
+    if (req.files) {
+      const updatedUser = await User.findOneAndReplace(
+        { _id: req.params.id },
+        { $set: { coverPhoto: req?.files[0]?.filename } },
+        // coverPhoto: req.files[0].filename
+      );
+      res.send({ updatedUser });
+      // res.send({ message: 'The NewsFeed was updated' });
+    }
+
+  } catch (err) {
+    res.status(400).send({ error: err });
+  }
+});
+
+router.post('/follow/:id/:userid', async (req, res) => {
+  console.log("req", req, res)
+  const foundUser = await User.findOne({ _id: req.params.id });
+  console.log("foundUser", foundUser)
+  if (foundUser?.followers.includes(req.params.userid)) {
+    const updatedPost = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $pullAll: { followers: [req.params.userid] } },
+      { new: true }
+    );
+    res.status(200).send(updatedPost);
+  } else {
+    const updatedPost = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $push: { followers: req.params.userid } },
+      { new: true }
+    );
+    res.status(200).send(updatedPost);
+  }
+});
+
+router.post('/following/:id/:userid', async (req, res) => {
+  console.log("req", req)
+  const foundUser = await User.findOne({ _id: req.params.id });
+  console.log("foundUser", foundUser)
+  if (foundUser?.followers.includes(req.params.userid)) {
+    const updatedPost = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $pullAll: { following: [req.params.userid] } },
+      { new: true }
+    );
+    res.status(200).send(updatedPost);
+  } else {
+    const updatedPost = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { $push: { following: req.params.userid } },
+      { new: true }
+    );
+    res.status(200).send(updatedPost);
+  }
+});
+
 
 module.exports = router;

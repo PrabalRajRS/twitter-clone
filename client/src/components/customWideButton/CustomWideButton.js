@@ -5,6 +5,7 @@ import './CustomWideButton.scss'
 const CustomWideButton = (props) => {
     return (
         <Button size="sm"
+            type={props.type}
             onClick={props.onClick}
             className={props.className}>
             {props.buttonText}

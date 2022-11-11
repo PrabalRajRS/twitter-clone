@@ -11,6 +11,7 @@ import { setCurrentUser } from "../../redux/slice/auth";
 import { GetApi, PostApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
 import { useDispatch } from "react-redux";
+import { setUsers } from "../../redux/slice/users";
 
 
 const Login = (props) => {
@@ -30,29 +31,22 @@ const Login = (props) => {
         }
     }
 
-    const getUserData = async () => {
-        await GetApi(`${baseUrl}/users`)
-            .then(response => {
-                console.log(response)
-                dispatch(setCurrentUser(response));
-            })
-            .catch(error => console.log(error))
-
-        // navigate("/home");
-    }
-
     const handleLogin = async () => {
-        getUserData()
+        // getUserData()
         if (!user.email == "" || !user.password == "") {
             await PostApi(`${baseUrl}/users/login`, user)
                 .then(response => {
-                    console.log(response.data)
+                    dispatch(setCurrentUser(response.data));
+                    localStorage.setItem("userId", response.data?.user?.id)
                     const { token } = response.data;
                     localStorage.setItem("jwtToken", token);
-                    // dispatch(setCurrentUser(response.data));
+                    if (token) {
+                        navigate("/home");
+                    }
                 })
                 .catch(error => console.log(error))
         }
+
     }
 
     const handleChange = (e) => {

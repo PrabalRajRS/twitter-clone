@@ -11,8 +11,7 @@ import { useSelector } from 'react-redux';
 
 const SideMenu = () => {
     const navigate = useNavigate();
-    const currentUser = useSelector(state => state.auth?.user);
-    console.log("currentUser", currentUser)
+    const userId = localStorage.getItem("userId");
 
     const handleClick = (route, item) => {
         navigate(route, {
@@ -21,13 +20,16 @@ const SideMenu = () => {
             }
         });
     }
+    
     const handleChange = (key) => {
         switch (key) {
             case "6":
-                handleClick("/profile/:id");
+                handleClick(`/profile/${userId}`);
+                break;
             case "7":
                 localStorage.clear();
                 handleClick("/");
+                break;
             default:
                 return
 

@@ -2,26 +2,32 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const NewsFeedSchema = new Schema({
-    user_id: {
+    userId: {
         type: String,
-        ref: 'User'
+    },
+    name: {
+        type: String,
     },
     content: {
         type: String,
         required: true
     },
     reTweets: {
-        type: Number,
-        default: 0
+        type: Array,
+        default: []
     },
     likes: {
-        type: Number,
-        default: 0
+        type: Array,
+        default: []
     },
-    comments: Array,
+    comments: {
+        type: Array,
+        default: []
+    },
     image: {
-        type: String,
-        default: ""
+        type: Array,
+        default: [],
+        required: false
     },
     date: {
         type: Date,
@@ -32,4 +38,5 @@ const NewsFeedSchema = new Schema({
         versionKey: false,
         timestamps: true,
     });
+
 module.exports = NewsFeed = mongoose.model("NewsFeed", NewsFeedSchema);

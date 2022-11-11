@@ -5,6 +5,8 @@ const passport = require("passport");
 
 const users = require("./routes/api/users");
 const newsFeed = require("./routes/api/newsFeed");
+const comment = require("./routes/api/comments");
+
 
 const cors = require("cors")
 const app = express();
@@ -24,4 +26,6 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/newsFeed", newsFeed);
+app.use("/api/comments", comment);
+app.use('../client/public/uploads', express.static('uploads'));
 app.listen(5000);

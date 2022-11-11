@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const PostApi = (url, data) => {
-    console.log(url, data)
     return new Promise((resolve, reject) => {
         axios
             .post(url, data)

@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import CustomWideButton from "../customWideButton/CustomWideButton";
 import { useSelector, useDispatch } from 'react-redux'
 import './Register.scss';
-import { setCurrentUser } from "../../redux/slice/auth";
 import { PostApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
 
@@ -15,8 +14,6 @@ const Register = (props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isNextClicked, setIsNextClicked] = useState(false);
-    const reduxData = useSelector(state => state.auth);
-    console.log(reduxData);
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -35,7 +32,6 @@ const Register = (props) => {
         await PostApi(`${baseUrl}/users/register`, user)
             .then(response => {
                 console.log(response);
-                dispatch(setCurrentUser(response.data));
                 navigate("/home");
             })
             .catch(error => console.log(error))
