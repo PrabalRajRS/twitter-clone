@@ -1,3 +1,5 @@
+@use "../../constants.scss" as color;
+
 .container.home-container {
     padding: 0;
     margin: 0;
@@ -21,7 +23,7 @@
     }
 
     .col-1 {
-        border-right: 1px solid #cfd9de;
+        border-right: 1px solid color.$borderGrey;
 
         .logo {
             width: 40px;
@@ -29,7 +31,7 @@
         }
 
         .tweet-button {
-            background-color: #1d9bf0;
+            background-color: color.$primaryBlue;
             border-radius: 50px;
             width: 200px;
             margin: 20px 30px;
@@ -39,7 +41,7 @@
     }
 
     .col-2 {
-        border-right: 1px solid #cfd9de;
+        border-right: 1px solid color.$borderGrey;
 
         .page-title {
             padding: 20px;
@@ -66,7 +68,7 @@
 
                 .search-icon {
                     margin: 12px;
-                    color: #1d9bf0;
+                    color: color.$primaryBlue;
                     font-size: 20px;
                 }
 

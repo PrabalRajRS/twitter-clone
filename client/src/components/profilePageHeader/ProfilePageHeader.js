@@ -24,7 +24,7 @@ const ProfilePageHeader = ({ userId }) => {
     const handlePost = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        console.log("profilePicRef", pictures.profile)
+        console.log("profilePicRef", pictures.cover)
         if (pictures?.profile) {
             formData.append('profilePicture', pictures?.profile);
             console.log("formData", formData)
@@ -90,7 +90,7 @@ const ProfilePageHeader = ({ userId }) => {
 
     return (
         <div className="container">
-            <form enctype="multipart/form-data" onSubmit={handlePost}>
+            <form encType="multipart/form-data" onSubmit={handlePost}>
                 <div className="cover-pic" onClick={loggedUserId === userId && changeCoverPicture}>
                     <input ref={coverPicRef}
                         onChange={e => setPictures({ cover: e.target.files[0] })}

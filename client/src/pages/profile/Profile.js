@@ -11,6 +11,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ProfilePageHeader from "../../components/profilePageHeader/ProfilePageHeader";
 import { GetApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -18,7 +19,8 @@ const Profile = () => {
     const params = useParams();
     console.log(location, params)
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const [users, setUsers] = useState([]);
+    const usersList = useSelector(state => state.usersReducer?.users);
+    // const [users, setUsers] = useState([]);
     const [data, setData] = useState()
 
     useEffect(() => {
@@ -31,14 +33,14 @@ const Profile = () => {
     }, [localStorage])
 
 
-    const getUsersData = async () => {
-        await GetApi(`${baseUrl}/users`)
-            .then(response => {
-                console.log("users response ", response.data);
-                setUsers(response?.data);
-            })
-            .catch(error => console.log(error))
-    }
+    // const getUsersData = async () => {
+    //     await GetApi(`${baseUrl}/users`)
+    //         .then(response => {
+    //             console.log("users response ", response.data);
+    //             setUsers(response?.data);
+    //         })
+    //         .catch(error => console.log(error))
+    // }
 
     const getUserData = async () => {
         await GetApi(`${baseUrl}/users/${params?.id}`)
@@ -50,14 +52,14 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        getUsersData();
+        // getUsersData();
         getUserData();
     }, [navigate])
 
     const [searchValue, setSearchValue] = useState("")
     const handleSearch = (e) => {
         setSearchValue(e.target.value)
-        const filteredlist = users?.users.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
+        const filteredlist = usersList?.users.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
         setFilteredUsers(filteredlist)
     }
 

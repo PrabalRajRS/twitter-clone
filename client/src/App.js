@@ -12,7 +12,6 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile/:id" element={<Profile />} />
       </Routes>
-
       {/* <Register /> */}
     </div>
   );

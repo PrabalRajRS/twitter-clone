@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Image, Modal, Row } from "react-bootstrap";
+import { Button, Card, Col, Dropdown, DropdownButton, Image, Modal, Row } from "react-bootstrap";
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { FaRetweet } from 'react-icons/fa';
 import { BsChat } from 'react-icons/bs';
@@ -7,7 +7,7 @@ import { BiUpload } from 'react-icons/bi'
 
 import "./NewsFeed.scss";
 import { useNavigate, useParams } from "react-router-dom";
-import { GetApi, PostApi, PutApi } from "../../services/api.service";
+import { DeleteApi, GetApi, PostApi, PutApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
 import { useSelector } from "react-redux";
 import { RiCreativeCommonsZeroLine } from "react-icons/ri";
@@ -114,6 +114,14 @@ const NewsFeed = () => {
         setShowPost(true)
     }
 
+    const handleDelete = async (id) => {
+        await DeleteApi(`${baseUrl}/newsFeed/${id}`)
+            .then(response => {
+                setResponse(response)
+            })
+            .catch(error => console.log(error))
+    }
+
     useEffect(() => {
         getNewsFeed();
         getUserData();
@@ -125,7 +133,12 @@ const NewsFeed = () => {
             {
                 newsFeed && newsFeed.map((item) => (
                     <div className="container" key={item?._id}>
-                        <p style={{ fontWeight: "500", marginBottom: 0, marginLeft: "80px", color: "grey" }}>{item?.name && `You Retweeted`}</p>
+                        {
+                            item?.name &&
+                            <p style={{ fontWeight: "500", marginBottom: 0, marginLeft: "80px", color: "grey" }}>
+                                {(item?.userId === loggedUserId ? `You Retweeted` : `${item?.name} Retweeted`)}
+                            </p>
+                        }
                         <Row >
                             <Col sm={2} className="left-side">
                                 <div className="image-container">
@@ -135,7 +148,15 @@ const NewsFeed = () => {
                                 </div>
                             </Col>
                             <Col sm={10} className="right-side">
-                                <div className="card" key={item.id}>
+                                <div className="card" key={item._id}>
+                                    {
+                                        item._id === loggedUserId &&
+                                        <DropdownButton size="sm" className="delete">
+                                            <Dropdown.Item onClick={() => handleDelete(item._id)}>Delete</Dropdown.Item>
+                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                        </DropdownButton>
+                                    }
                                     {
                                         item?.name
                                             ? <p className="profileName">

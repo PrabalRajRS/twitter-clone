@@ -4,12 +4,14 @@ import { AiOutlineFileGif, AiOutlineSchedule } from 'react-icons/ai';
 import { BiMap } from 'react-icons/bi';
 import { BsEmojiSmile, BsImage, BsListStars } from 'react-icons/bs';
 import { FaGlobeAsia } from 'react-icons/fa';
+import { useSelector } from "react-redux";
 import { PostApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
 import './Tweet.scss';
 
 const Tweet = () => {
     const userId = localStorage.getItem("userId");
+    const currentUser = useSelector(state => state.authReducer?.user);
     const items = [
         {
             id: 0,
@@ -58,9 +60,9 @@ const Tweet = () => {
         const formData = new FormData();
         formData.append('userId', data.userId);
         formData.append('content', data.content);
-        formData.append('likes', data.likes);
-        formData.append('reTweets', data.reTweets);
-        formData.append('comments', data.comments);
+        // formData.append('likes', data.likes);
+        // formData.append('reTweets', data.reTweets);
+        // formData.append('comments', data.comments);
 
         for (let i = 0; i < data.image?.files.length; i++) {
             formData.append("image[]", data.image?.files[i]);
@@ -98,7 +100,10 @@ const Tweet = () => {
         <Row className="container">
             <Col sm={2} className="left-side">
                 <div className="image-container">
-                    <Image className="image" src="https://miro.medium.com/max/1400/0*0fClPmIScV5pTLoE.jpg" />
+                    {
+                        currentUser?.profilePicture != ""
+                            ? <Image className="image" src={`http://localhost:3000/uploads/${currentUser?.profilePicture}`} />
+                            : <Image className="image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" />}
                 </div>
             </Col>
             <Col sm={10} className="post-area">

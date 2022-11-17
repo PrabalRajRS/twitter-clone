@@ -1,3 +1,4 @@
+@use "../../constants.scss" as color;
 .login {
     align-items: center;
     justify-content: center;
@@ -37,7 +38,7 @@
         margin-top: 40px;
 
         b {
-            color: #1d9bf0;
+            color: color.$primaryBlue;
         }
     }
 

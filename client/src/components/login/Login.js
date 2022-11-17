@@ -7,7 +7,7 @@ import CloseButton from "react-bootstrap/CloseButton";
 import Form from 'react-bootstrap/Form';
 import CustomWideButton from "../customWideButton/CustomWideButton";
 import { useNavigate } from "react-router-dom";
-import { setCurrentUser } from "../../redux/slice/auth";
+import { setLoginData } from "../../redux/slice/auth";
 import { GetApi, PostApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
 import { useDispatch } from "react-redux";
@@ -32,11 +32,10 @@ const Login = (props) => {
     }
 
     const handleLogin = async () => {
-        // getUserData()
         if (!user.email == "" || !user.password == "") {
             await PostApi(`${baseUrl}/users/login`, user)
                 .then(response => {
-                    dispatch(setCurrentUser(response.data));
+                    // dispatch(setLoginData(response.data));
                     localStorage.setItem("userId", response.data?.user?.id)
                     const { token } = response.data;
                     localStorage.setItem("jwtToken", token);

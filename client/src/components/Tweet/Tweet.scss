@@ -1,9 +1,11 @@
+@use "../../constants.scss" as color;
+
 .container {
     .image-container {
         width: 50px;
         height: 50px;
         border-radius: 50px;
-        background-color: aqua;
+        background-color: color.$borderGrey;
         margin-left: 12px;
 
         .image {
@@ -32,7 +34,7 @@
         .post-area-footer {
             .status-button {
                 background-color: white;
-                color: #1d9bf0;
+                color: color.$primaryBlue;
                 border: none;
             }
 
@@ -41,13 +43,13 @@
 
                 .icon {
                     margin: 10px;
-                    color: #1d9bf0;
+                    color: color.$primaryBlue;
                 }
             }
 
             .tweet-button {
-                background-color: #1d9bf0;
-                color: white;
+                background-color: color.$primaryBlue;
+                color: color.$white;
                 border-radius: 50px;
                 float: right;
                 margin-top: -40px;

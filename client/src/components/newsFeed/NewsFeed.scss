@@ -1,3 +1,5 @@
+@use "../../constants.scss" as color;
+
 .newsfeed {
     margin-top: 10px;
 
@@ -18,7 +20,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50px;
-            background-color: aqua;
+            background-color: color.$borderGrey;
             margin-left: 12px;
 
             .image {
@@ -33,6 +35,20 @@
         .card {
             border: none;
             background-color: transparent;
+            width: 100%;
+
+            .delete .btn-primary {
+                width: 20px;
+                height: 20px;
+                padding: 0;
+                border: none;
+                color: color.$black;
+                position: absolute;
+                right: 10px;
+                --bs-btn-bg: transparent !important;
+                --bs-btn-border-color: transparent !important;
+                // background-color: transparent !important;
+            }
 
             .img-container {
                 display: flex;
@@ -80,8 +96,8 @@
                 }
 
                 .icon:hover {
-                    background-color: white;
-                    color: #1d9bf0;
+                    background-color: color.$white;
+                    color: color.$primaryBlue;
                 }
             }
         }
@@ -89,7 +105,7 @@
 
     .container:hover,
     .card:hover {
-        background-color: rgb(238, 238, 238);
+        background-color: #eeeeee;
         transition: 0.5s;
     }
 }

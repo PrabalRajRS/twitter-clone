@@ -1,6 +1,7 @@
+@use "../../constants.scss" as color;
 
 .signUp-button {
-    background-color: #1d9bf0 !important;
+    background-color: color.$primaryBlue !important;
     border-radius: 50px !important;
     font-size: 17px;
     padding: 3px 22px;
@@ -15,12 +16,12 @@
     padding: 3px 22px;
     font-weight: 600;
     width: 300px;
-    border-color: #cfd9de;
-    color: #1d9bf0 !important
+    border-color: color.$borderGrey;
+    color: color.$primaryBlue !important
 }
 
 .next-button {
-    background-color: #1a1919 !important;
+    background-color: color.$black !important;
     color: white !important;
     border-radius: 50px !important;
     font-size: 17px;
@@ -37,14 +38,19 @@
     padding: 3px 22px;
     font-weight: 600;
     width: 300px;
-    border-color: #cfd9de;
-    color: #1a1919 !important
+    border-color: color.$borderGrey;
+    color: color.$black !important
 }
 
-.small-white{
+.small-white {
     background-color: white !important;
-    color: #1a1919 !important;
+    color: color.$black !important;
     font-weight: 600 !important;
     border-radius: 50px !important;
-    border: 2px solid #cfd9de !important;
+    border: 2px solid color.$borderGrey !important;
+}
+
+.small-width{
+    width: 100px;
+    height: 40px;
 }

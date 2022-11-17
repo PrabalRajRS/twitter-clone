@@ -11,14 +11,23 @@ import { GetApi } from "../../services/api.service";
 import { baseUrl } from "../../services/apiUrl";
 import { setUsers } from "../../redux/slice/users";
 import Tweet from "../../components/Tweet/Tweet";
+import { setCurrentUser } from "../../redux/slice/auth";
+import WhoToFollow from "../../components/whoToFollow/WhoToFollow";
 
 
 const Home = () => {
 
     const navigate = useNavigate();
-    const currentUser = useSelector(state => state.auth?.user);
+    const dispatch = useDispatch();
+    const loggedUserId = localStorage.getItem("userId");
+    const currentUser = useSelector(state => state.authReducer?.user);
+    const usersList = useSelector(state => state.usersReducer?.users);
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [searchValue, setSearchValue] = useState("")
+    const [userss, setUserss] = useState([]);
+
+    // console.log("redux-ussr: ", currentUser, loggedUserId, usersList);
+
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
         if (!token) {
@@ -28,24 +37,34 @@ const Home = () => {
         }
     }, [localStorage])
 
-
     const getUserData = async () => {
-        await GetApi(`${baseUrl}/users`)
+        await GetApi(`${baseUrl}/users/${loggedUserId}`)
             .then(response => {
-                setUsers(response?.data);
+                // console.log("user", response?.user)
+                dispatch(setCurrentUser(response?.user));
             })
             .catch(error => console.log(error))
     }
-    const [searchValue, setSearchValue] = useState("")
+
+    const getUsersData = async () => {
+        await GetApi(`${baseUrl}/users`)
+            .then(response => {
+                // console.log(response?.data)
+                setUserss(response?.data);
+                dispatch(setUsers(response?.data));
+            })
+            .catch(error => console.log(error))
+    }
     const handleSearch = (e) => {
         setSearchValue(e.target.value)
-        const filteredlist = users?.users.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
+        const filteredlist = userss?.users.filter(item => item.name.toLowerCase().includes(e.target.value.toLowerCase()));
         setFilteredUsers(filteredlist)
     }
 
     useEffect(() => {
-        getUserData()
-    }, [navigate]);
+        getUserData();
+        getUsersData()
+    }, [navigate, dispatch]);
 
     return (
         <Container className="home-container">
@@ -97,6 +116,7 @@ const Home = () => {
                     <div className="col-body">
                         <div>
                             <WhatsHappeningCard />
+                            <WhoToFollow />
                         </div>
                     </div>
                 </Col>
